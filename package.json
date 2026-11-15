@@ -1,0 +1,21 @@
+{
+  "name": "x-followback-helper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build --config vite.content.ts && vite build --config vite.background.ts",
+    "test": "vitest run",
+    "test:browser": "node tests/browser.mjs",
+    "package": "npm run build && node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.0",
+    "@playwright/test": "^1.56.0",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.2.0",
+    "vitest": "^3.2.0",
+    "fflate": "^0.8.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "X 回关助手",
+  "version": "1.0.0",
+  "description": "整理已浏览的关注者，找出尚未回关的人。仅本地保存，由你手动关注。",
+  "permissions": ["storage"],
+  "background": {"service_worker": "background.js", "type": "module"},
+  "action": {"default_title": "打开 / 收起 X 回关助手"},
+  "content_scripts": [{"matches": ["https://x.com/*"], "js": ["content.js"], "run_at": "document_idle"}]
+}

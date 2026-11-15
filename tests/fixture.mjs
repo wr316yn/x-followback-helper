@@ -1,0 +1,14 @@
+export const fixture = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>X 回关助手 · 模拟测试页</title><style>
+body{margin:0;background:white;color:#17202a;font:16px 'Segoe UI','Microsoft YaHei',sans-serif}nav{position:fixed;left:36px;top:40px;width:180px}nav h1{font-size:32px}main{margin-left:245px;width:580px;border:1px solid #e0e5ea;min-height:100vh}header{padding:25px;border-bottom:1px solid #ddd}header h1{font-size:22px}a{color:inherit;text-decoration:none}[data-testid=UserCell]{padding:20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee}[data-testid=UserCell] a{display:block}button{padding:8px 18px;border:1px solid #bbc7d1;border-radius:24px;cursor:pointer;background:#f6f9fb;color:#17202a}.face{width:42px;height:42px;background:#e7eff5;border-radius:50%;display:grid;place-items:center}.identity{flex:1}.hint{font-size:12px;color:#536471;margin:4px 0}aside{padding:24px;color:#536471}.tab{display:inline-block;margin-right:25px;padding:8px 0}h2{font-size:16px}
+</style><nav><h1>𝕏</h1><p>主页</p><p>通知</p><p>私信</p><a data-testid="AppTabBar_Profile_Link" href="/demo_owner">个人资料</a><p><button data-testid="SideNav_AccountSwitcher_Button">示例账号 @demo_owner</button></p><small>此页全部为虚构测试账号</small></nav>
+<main data-testid="primaryColumn"><header><h1>示例账号</h1><a class="tab" role="tab" aria-selected="true" href="/demo_owner/followers">关注者</a><a class="tab" role="tab" aria-selected="false" href="/demo_owner/following">正在关注</a></header><section role="region" aria-labelledby="followers"><h1 id="followers" style="padding:0 25px;font-size:16px">关注者</h1><div id="rows"></div></section></main><aside>推荐关注区域（不计入名单）<div data-testid="UserCell"><a href="/outsider">@outsider</a><button data-testid="999-follow">关注</button></div></aside>
+<script>
+window.clicks=0;
+window.addUser=(handle,name,state='follow',text='回关',id='101')=>{
+ const row=document.createElement('div');row.dataset.testid='cellInnerDiv';row.innerHTML='<div data-testid="UserCell"><div class="face"></div><div class="identity"><a class="name"></a><a class="handle"></a><p class="hint">关注了你</p></div><button></button></div>';
+ row.querySelector('.hint').dataset.testid='userFollowIndicator';row.querySelector('.face').textContent=name[0];row.querySelector('.name').textContent=name;row.querySelector('.handle').textContent='@'+handle;
+ row.querySelectorAll('a').forEach(a=>a.href='/'+handle);const b=row.querySelector('button');b.dataset.testid=id+'-'+state;b.textContent=text;
+ b.onclick=()=>{window.clicks++;b.dataset.testid=id+'-unfollow';b.textContent='正在关注';};document.querySelector('#rows').append(row);return row;
+};
+addUser('alice','林间工作室');addUser('bob','陈一 · 设计笔记','unfollow','正在关注','102');addUser('carol','月亮邮局','unfollow','已请求','103');addUser('dora','Dora / 插画','mystery','暂不可用','104');
+</script></html>`;
