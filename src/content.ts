@@ -1,3 +1,4 @@
+import { installLanguage } from './language';
 import { currentOwner,isOwnFollowers,followerCells,parseCell,profileObservation,handleFromPath,relationButton } from './adapter';
 import { emptyData,labels,type AccountData,type Command,type Entry,type Observation } from './model';
 import css from './panel.css?inline';
@@ -16,11 +17,32 @@ function start() {
  <div class="confirm" hidden><p>清空当前账号的本地名单与忽略记录？不会改变 X 上的关注关系。清空后暂停收集。</p><button id="confirm-clear">清空记录</button> <button id="cancel-clear">取消</button></div>
  <footer class="footer"><span>仅本地保存 · 历史关系需复核</span><button id="clear">清空记录</button></footer></section>`;
  document.documentElement.append(host);
+ installLanguage(root);
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const panel=$<HTMLElement>('.panel'), launcher=$<HTMLButtonElement>('.launcher'), list=$('.list');
  let owner:string|null=null,data:AccountData=emptyData(),loaded=false,paused=false,loading=false,collecting=false,error='',open=false;
  let epoch=0,lastSignature='',lastRoute='',lastPrimary:Element|null=null,scanTimer:ReturnType<typeof setTimeout>;
  const seen=new Set<string>(),sent=new Map<string,string>(),stable=new Map<string,{signature:string;since:number}>();
+ let quick=false, quickOwner:string|null=null, quickTicks=0, idleTicks=0, lastCount=0;
+ const quickButton=document.createElement('button');quickButton.id='quick';quickButton.textContent='快捷收集';quickButton.style.gridColumn='1 / -1';$('.controls').append(quickButton);
+ const quickHint=document.createElement('p');quickHint.className='quick-hint';quickHint.style.cssText='grid-column:1/-1;font-size:12px;margin:0;color:var(--muted)' ;quickButton.after(quickHint);
+ function stopQuick(message='已停止快捷收集'){quick=false;quickButton.textContent='快捷收集';quickHint.textContent=message;}
+ quickButton.onclick=()=>{
+   if(quick){stopQuick();return;}
+   if(!owner || !loaded || !isOwnFollowers(document,location.pathname,owner))return;
+   quick=true;quickOwner=owner;paused=false;quickTicks=0;idleTicks=0;lastCount=seen.size;
+   quickButton.textContent='停止收集';quickHint.textContent='正在自动浏览；只收集已加载内容，不会自动关注。';render();
+ };
+ setInterval(()=>{
+   quickButton.disabled=!quick && (!loaded || !owner || !isOwnFollowers(document,location.pathname,owner));
+   if(!quick)return;
+   if(document.hidden || paused || error || currentOwner(document)!==quickOwner || !quickOwner || !isOwnFollowers(document,location.pathname,quickOwner)){stopQuick();return;}
+   if(++quickTicks>100){stopQuick('已达到本次浏览上限，可点击继续收集。');return;}
+   idleTicks=seen.size===lastCount?idleTicks+1:0;lastCount=seen.size;
+   if(idleTicks>=5){stopQuick('暂未发现新账号，已停止；不代表已收集全部关注者。');return;}
+   if(document.querySelector('[role="dialog"], [data-testid="primaryColumn"] [role="alert"]')){stopQuick();return;}
+   window.scrollBy({top:Math.max(250,window.innerHeight*0.65),behavior:'instant'});
+ },3000);
  let confirmClear=false;
  function toggle(){open=!open;panel.hidden=!open;launcher.setAttribute('aria-expanded',String(open));if(open){render();$<HTMLInputElement>('input').focus();}else launcher.focus();}
  launcher.onclick=toggle;$<HTMLButtonElement>('.close').onclick=toggle;
@@ -148,6 +170,7 @@ function start() {
    const view=item.querySelector<HTMLButtonElement>('.primary')!;view.dataset.key=`view:${entry.handle}`;
    if(entry.relation!=='pending')view.textContent='查看账号';
    view.onclick=()=>{
+     if(quick)stopQuick();
      if(!owner || currentOwner(document)!==owner){schedule();return;}
      if(isOwnFollowers(document,location.pathname,owner)){
        const cell=followerCells(document).find(c=>parseCell(c)?.handle===entry.handle);
@@ -162,3 +185,4 @@ function start() {
  }
  void scan();
 }
+

@@ -41,6 +41,18 @@ try {
  await ui.getByRole('button',{name:'回关助手',exact:true}).click();
  await expect(ui.locator('.stats')).toContainText('本次已检查 4 人',{timeout:15000});
  await expect(ui.locator('.row')).toHaveCount(1);await expect(ui.locator('.row')).toContainText('@alice');checks.push('initial detection: 4 followers, 1 pending, sidebar excluded');
+ await ui.getByRole('button',{name:'English',exact:true}).click();
+ await expect(ui.locator('h2')).toHaveText('Keep follow-backs in sight');
+ await expect(ui.locator('.stats')).toContainText('Checked 4 this session');
+ await ui.getByRole('button',{name:'Quick collect',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>window.scrollY),{timeout:7000}).toBeGreaterThan(0);
+ await ui.getByRole('button',{name:'Stop collection',exact:true}).click();
+ await expect(ui.locator('#quick')).toHaveText('Quick collect');
+ expect(await page.evaluate(()=>window.clicks)).toBe(0);
+ await ui.getByRole('button',{name:'中文',exact:true}).click();
+ await expect(ui.locator('h2')).toHaveText('把回关留在眼前');
+ await page.evaluate(()=>window.scrollTo(0,0));
+ checks.push('English/Chinese toggle and stoppable quick collection without following');
  expect(await page.evaluate(()=>window.clicks)).toBe(0);
  await page.screenshot({path:`artifacts/${label}-light.png`});
  await page.evaluate(()=>document.body.style.backgroundColor='rgb(0, 0, 0)');
