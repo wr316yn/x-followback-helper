@@ -57,7 +57,13 @@ try {
  await page.screenshot({path:`artifacts/${label}-light.png`});
  await page.evaluate(()=>document.body.style.backgroundColor='rgb(0, 0, 0)');
  await expect(ui).toHaveAttribute('data-dark','');await page.screenshot({path:`artifacts/${label}-dark.png`});
+ await ui.locator('#theme').click();await expect(ui).not.toHaveAttribute('data-dark','');
+ await ui.locator('#theme').click();await expect(ui).toHaveAttribute('data-dark','');
  await page.evaluate(()=>document.body.style.backgroundColor='white');
+ await expect(ui).toHaveAttribute('data-dark','');
+ await ui.locator('#theme-auto').click();await expect(ui).not.toHaveAttribute('data-dark','');
+ checks.push('manual light/dark override and restoring Follow X');
+
  await ui.getByRole('button',{name:'查看并回关'}).click();
  await expect(page.locator('[data-testid="101-follow"]')).toBeFocused();expect(await page.evaluate(()=>window.clicks)).toBe(0);checks.push('locates native button without clicking');
  await page.locator('[data-testid="101-follow"]').click();

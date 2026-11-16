@@ -1,3 +1,4 @@
+import { installTheme } from './theme';
 import { installLanguage } from './language';
 import { currentOwner,isOwnFollowers,followerCells,parseCell,profileObservation,handleFromPath,relationButton } from './adapter';
 import { emptyData,labels,type AccountData,type Command,type Entry,type Observation } from './model';
@@ -18,6 +19,7 @@ function start() {
  <footer class="footer"><span>仅本地保存 · 历史关系需复核</span><button id="clear">清空记录</button></footer></section>`;
  document.documentElement.append(host);
  installLanguage(root);
+ installTheme(root,host);
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const panel=$<HTMLElement>('.panel'), launcher=$<HTMLButtonElement>('.launcher'), list=$('.list');
  let owner:string|null=null,data:AccountData=emptyData(),loaded=false,paused=false,loading=false,collecting=false,error='',open=false;
@@ -82,8 +84,6 @@ function start() {
    }
    const route=location.pathname,primary=document.querySelector('[data-testid="primaryColumn"]');
    if(route!==lastRoute || primary!==lastPrimary){stable.clear();lastRoute=route;lastPrimary=primary;}
-   const background=getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g)?.map(Number);
-   host.toggleAttribute('data-dark',!!background && (background[3]??1)>0 && background[0]*.299+background[1]*.587+background[2]*.114<128);
    render();
    if(paused || collecting)return;
    const observations:Observation[]=[];

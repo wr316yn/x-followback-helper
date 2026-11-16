@@ -4,7 +4,7 @@
 
 **下载：** [最新版本与安装包](https://github.com/wr316yn/x-followback-helper/releases/latest) · [安装教程](安装使用.md) · [隐私说明](PRIVACY.md)
 
-在 Release 的 Assets 中下载 `x-followback-helper-v1.1.1.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.1.1-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
+在 Release 的 Assets 中下载 `x-followback-helper-v1.2.0.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.2.0-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
 
 ![X 回关助手界面，截图账号均为虚构测试数据](docs/preview.png)
 
@@ -72,3 +72,7 @@ npm run package
 ### v1.1.1 语言按钮
 
 右上角语言按钮改为地球图标与胶囊样式，显示当前语言 EN / 中文，点击切换到另一种语言。深色面板使用深灰底与浅色图标，浅色面板使用浅灰底。
+
+## v1.2.0：主题切换
+
+语言按钮旁新增太阳 / 月亮圆形按钮，点击切换日光与黑夜主题。默认根据 X 页面背景选择浅色或深色；手动选择会保存并同步到同一浏览器的其他标签页。底部“跟随 X”可恢复自动适配。只改变助手界面，不改变 X 网站主题。

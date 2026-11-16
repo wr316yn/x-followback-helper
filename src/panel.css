@@ -11,3 +11,5 @@ button{cursor:pointer;color:var(--ink);border:1px solid var(--line);border-radiu
 @media(max-width:600px){.panel{top:12px;right:12px;max-height:calc(100dvh - 24px)}.launcher{left:12px;bottom:12px}}
 
 .heading{gap:8px}.heading>div{flex:1;min-width:0}#language{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;height:40px;min-width:76px;padding:0 14px;border:0;border-radius:999px;background:#ececf0;color:#303038;font-size:14px;font-weight:600;line-height:1;white-space:nowrap}#language svg{flex-shrink:0}#language:hover{background:#dedee5}:host([data-dark]) #language{background:#34343c;color:#f3f3f5}:host([data-dark]) #language:hover{background:#44444e}
+
+#theme{display:grid;place-items:center;flex-shrink:0;width:38px;height:38px;border:0;border-radius:50%;padding:0;background:#ececf0;color:#25252b}#theme:hover{background:#dedee5}:host([data-dark]) #theme{background:#34343c;color:#f3f3f5}:host([data-dark]) #theme:hover{background:#44444e}.footer{flex-wrap:wrap}#theme-auto{color:var(--blue)}.heading h2{font-size:18px}
