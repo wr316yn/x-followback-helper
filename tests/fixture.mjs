@@ -7,7 +7,7 @@ window.clicks=0;
 window.addUser=(handle,name,state='follow',text='回关',id='101')=>{
  const row=document.createElement('div');row.dataset.testid='cellInnerDiv';row.innerHTML='<div data-testid="UserCell"><div class="face"></div><div class="identity"><a class="name"></a><a class="handle"></a><p class="hint">关注了你</p></div><button></button></div>';
  row.querySelector('.hint').dataset.testid='userFollowIndicator';row.querySelector('.face').textContent=name[0];row.querySelector('.name').textContent=name;row.querySelector('.handle').textContent='@'+handle;
- row.querySelectorAll('a').forEach(a=>a.href='/'+handle);const b=row.querySelector('button');b.dataset.testid=id+'-'+state;b.textContent=text;
+ row.querySelectorAll('a').forEach(a=>a.href='/'+handle);const avatar=document.createElement('img');avatar.src='https://pbs.twimg.com/profile_images/'+id+'/test_normal.jpg';avatar.style.cssText='width:1px;height:1px';row.querySelector('.name').prepend(avatar);const b=row.querySelector('button');b.dataset.testid=id+'-'+state;b.textContent=text;
  b.onclick=()=>{window.clicks++;b.dataset.testid=id+'-unfollow';b.textContent='正在关注';};document.querySelector('#rows').append(row);return row;
 };
 addUser('alice','林间工作室');addUser('bob','陈一 · 设计笔记','unfollow','正在关注','102');addUser('carol','月亮邮局','unfollow','已请求','103');addUser('dora','Dora / 插画','mystery','暂不可用','104');

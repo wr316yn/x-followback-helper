@@ -4,7 +4,7 @@
 
 **下载：** [最新版本与安装包](https://github.com/wr316yn/x-followback-helper/releases/latest) · [安装教程](安装使用.md) · [隐私说明](PRIVACY.md)
 
-在 Release 的 Assets 中下载 `x-followback-helper-v1.2.2.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.2.2-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
+在 Release 的 Assets 中下载 `x-followback-helper-v1.3.0.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.3.0-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
 
 ![X 回关助手界面，截图账号均为虚构测试数据](docs/preview.png)
 

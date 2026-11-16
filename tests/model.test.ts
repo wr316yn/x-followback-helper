@@ -26,3 +26,11 @@ it('keeps unknown as unknown rather than asserting follow success',()=>{
  const data=reduce(emptyData(),observe([alice]));
  expect(reduce(data,observe([{...alice,checkedAt:200,relation:'unknown'}])).entries.alice.relation).toBe('unknown');
 });
+
+it('preserves avatar through profile refresh and rejects external image hosts',()=>{
+ const avatarUrl='https://pbs.twimg.com/profile_images/101/photo_normal.jpg';
+ let data=reduce(emptyData(),observe([{...alice,avatarUrl}]));
+ expect(data.entries.alice.avatarUrl).toBe(avatarUrl);
+ data=reduce(data,observe([{...alice,checkedAt:200}]));expect(data.entries.alice.avatarUrl).toBe(avatarUrl);
+ data=reduce(data,observe([{...alice,checkedAt:300,avatarUrl:'https://evil.example/image.png'}]));expect(data.entries.alice.avatarUrl).toBe(avatarUrl);
+});

@@ -1,7 +1,7 @@
 import { installTheme } from './theme';
 import { installLanguage } from './language';
 import { currentOwner,isOwnFollowers,followerCells,parseCell,profileObservation,handleFromPath,relationButton } from './adapter';
-import { emptyData,labels,type AccountData,type Command,type Entry,type Observation } from './model';
+import { emptyData,labels,safeAvatar,type AccountData,type Command,type Entry,type Observation } from './model';
 import css from './panel.css?inline';
 
 if(!document.getElementById('x-followback-helper')) start();
@@ -97,7 +97,7 @@ function start() {
    for(const handle of stable.keys())if(!present.has(handle))stable.delete(handle);
    const updates:Observation[]=[];
    for(const item of observations) {
-     const sig=[item.relation,item.userId,item.name,!!item.followerSeenAt].join('|'),prev=stable.get(item.handle);
+     const sig=[item.relation,item.userId,item.name,item.avatarUrl,!!item.followerSeenAt].join('|'),prev=stable.get(item.handle);
      if(!prev || prev.signature!==sig){stable.set(item.handle,{signature:sig,since:Date.now()});continue;}
      // Wait for transient/optimistic UI states to settle; this is still page evidence, not an API receipt.
      if(Date.now()-prev.since<1200)continue;
@@ -106,7 +106,7 @@ function start() {
    if(updates.length){
      collecting=true;const token=epoch;
      const ok=await request({type:'observe',owner,revision:data.revision,entries:updates});
-     if(ok && token===epoch)for(const item of updates){sent.set(item.handle,[item.relation,item.userId,item.name,!!item.followerSeenAt].join('|'));if(item.followerSeenAt)seen.add(item.handle);}
+     if(ok && token===epoch)for(const item of updates){sent.set(item.handle,[item.relation,item.userId,item.name,item.avatarUrl,!!item.followerSeenAt].join('|'));if(item.followerSeenAt)seen.add(item.handle);}
      collecting=false;render();
    }
  }
@@ -163,6 +163,9 @@ function start() {
    const item=document.createElement('article');item.className='row';
    item.innerHTML='<div class="identity"><span class="avatar" aria-hidden="true"></span><div class="who"><div class="name"></div><div class="handle"></div></div><span class="badge"></span></div><p class="when"></p><div class="actions"><button class="primary">查看并回关</button><button class="ignore"></button></div>';
    item.querySelector('.avatar')!.textContent=Array.from(entry.name)[0] || '@';
+   const avatarUrl=safeAvatar(entry.avatarUrl);
+   if(avatarUrl){const img=document.createElement('img');img.alt='';img.loading='lazy';img.decoding='async';img.referrerPolicy='no-referrer';img.onerror=()=>img.remove();img.src=avatarUrl;item.querySelector('.avatar')!.append(img);}
+
    item.querySelector('.name')!.textContent=entry.name;item.querySelector('.handle')!.textContent=`@${entry.handle}`;
    const badge=item.querySelector('.badge')!;badge.textContent=entry.ignored?'已忽略':labels[entry.relation];badge.classList.add(entry.relation);
    const time=new Date(entry.checkedAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -185,4 +188,5 @@ function start() {
  }
  void scan();
 }
+
 

@@ -19,8 +19,9 @@ const context=await chromium.launchPersistentContext(profile,{
 const errors=[],checks=[];
 try {
  if(installViaCDP){const session=await context.browser().newBrowserCDPSession();await session.send('Extensions.loadUnpacked',{path:resolve('dist')});await session.detach();}
+ await context.route('https://pbs.twimg.com/**',r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#79918a"/><circle cx="32" cy="24" r="12" fill="#e1d8cb"/><ellipse cx="32" cy="60" rx="24" ry="22" fill="#334b46"/></svg>'}));
  await context.route('https://x.com/**',r=>r.fulfill({contentType:'text/html',body:fixture}));
- const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+ const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>console.log('FAILED',r.url(),r.failure()));page.on('console',m=>{if(m.type()==='error')console.log(m.text())});
  if(mode==='shim'){
    // Branded browsers can disable command-line extension loading. This fallback tests
    // the built UI/adapter, not installation; the separate Chromium run covers real MV3.
@@ -41,6 +42,7 @@ try {
  await ui.getByRole('button',{name:'回关助手',exact:true}).click();
  await expect(ui.locator('.stats')).toContainText('本次已检查 4 人',{timeout:15000});
  await expect(ui.locator('.row')).toHaveCount(1);await expect(ui.locator('.row')).toContainText('@alice');checks.push('initial detection: 4 followers, 1 pending, sidebar excluded');
+ await expect(ui.locator('.avatar img')).toHaveCount(1);await expect.poll(()=>ui.locator('.avatar img').evaluate(img=>img.naturalWidth)).toBeGreaterThan(0);checks.push('observed avatar URL displays loaded image');
  await ui.getByRole('button',{name:'English',exact:true}).click();
  await expect(ui.locator('h2')).toHaveText('Keep follow-backs in sight');
  await expect(ui.locator('.stats')).toContainText('Checked 4 this session');

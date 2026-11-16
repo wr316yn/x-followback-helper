@@ -1,4 +1,4 @@
-import { validHandle, type Observation, type Relation } from './model';
+import { safeAvatar, validHandle, type Observation, type Relation } from './model';
 export function handleFromPath(path:string):string|null {
  const match=/^\/([a-zA-Z0-9_]{1,15})\/?$/.exec(path);
  return match ? match[1].toLowerCase() : null;
@@ -35,7 +35,8 @@ export function parseCell(cell:Element, now=Date.now()):Observation|null {
  if(!handle || !validHandle(handle)) return null;
  const name=links.find(a=>handleFromPath(a.getAttribute('href') || '')===handle && a.textContent?.trim() && !a.textContent.trim().startsWith('@'))?.textContent?.trim() || handle;
  const button=relationButton(cell);
- return {handle,name,userId:button?.dataset.testid?.match(/^(\d+)-/)?.[1],relation:buttonRelation(button),checkedAt:now,followerSeenAt:now};
+ const avatar=links.filter(a=>handleFromPath(a.getAttribute('href')||'')===handle).flatMap(a=>[...a.querySelectorAll<HTMLImageElement>('img')]).map(img=>safeAvatar(img.currentSrc || img.src)).find(Boolean);
+ return {handle,name,avatarUrl:avatar,userId:button?.dataset.testid?.match(/^(\d+)-/)?.[1],relation:buttonRelation(button),checkedAt:now,followerSeenAt:now};
 }
 export function followerCells(doc:Document):Element[] {
  const primary=doc.querySelector('[data-testid="primaryColumn"]');

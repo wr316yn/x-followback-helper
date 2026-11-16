@@ -6,8 +6,8 @@ const files={};
 function add(dir,prefix){for(const f of readdirSync(dir)){const path=join(dir,f);if(statSync(path).isDirectory())add(path,prefix);else files[`${prefix}/${relative('dist',path).replaceAll('\\','/')}`]=new Uint8Array(readFileSync(path));}}
 add('dist','X回关助手');
 for(const f of ['安装使用.md','PRIVACY.md','REFERENCES.md','TEST-REPORT.md'])files[f]=strToU8(readFileSync(f,'utf8'));
-writeFileSync('release/X回关助手-v1.2.2.zip',zipSync(files));
-console.log('Created release/X回关助手-v1.2.2.zip');
+writeFileSync('release/X回关助手-v1.3.0.zip',zipSync(files));
+console.log('Created release/X回关助手-v1.3.0.zip');
 const source={};
 const excluded=new Set(['node_modules','dist','release','artifacts','.git']);
 function addSource(dir='.'){
@@ -19,5 +19,5 @@ function addSource(dir='.'){
  }
 }
 addSource();
-writeFileSync('release/X回关助手-v1.2.2-源码.zip',zipSync(source));
-console.log('Created release/X回关助手-v1.2.2-源码.zip');
+writeFileSync('release/X回关助手-v1.3.0-源码.zip',zipSync(source));
+console.log('Created release/X回关助手-v1.3.0-源码.zip');
