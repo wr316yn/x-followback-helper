@@ -33,7 +33,8 @@ export function english(text:string):string {
 export function installLanguage(root:ShadowRoot){
  let language='zh';const originals=new WeakMap<Text,{source:string;output:string}>();
  const attributes=new WeakMap<Element,Map<string,{source:string;output:string}>>();
- const button=document.createElement('button');button.id='language';button.textContent='English';button.title='Switch language / 切换语言';
+ const button=document.createElement('button');button.id='language';button.type='button';
+ button.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6.5c4 2 10 2 14 0M5 17.5c4-2 10-2 14 0"/></svg><span></span>';
  root.querySelector('.heading')!.insertBefore(button,root.querySelector('.close'));
  function apply(){
   observer.disconnect();
@@ -51,7 +52,7 @@ export function installLanguage(root:ShadowRoot){
    const output=language==='en'?english(source):source;map.set(key,{source,output});attributes.set(element,map);
    if(value!==output)element.setAttribute(key,output);
   }
-  button.textContent=language==='en'?'中文':'English';(root.host as HTMLElement).lang=language==='en'?'en':'zh-CN';
+  button.querySelector('span')!.textContent=language==='en'?'EN':'中文';button.setAttribute('aria-label',language==='en'?'中文':'English');button.title=language==='en'?'Current language: English. Switch to Chinese':'当前语言：中文。切换为英文';(root.host as HTMLElement).lang=language==='en'?'en':'zh-CN';
   observer.observe(root,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['aria-label','placeholder']});
  }
  const observer=new MutationObserver(apply);

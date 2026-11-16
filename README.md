@@ -4,7 +4,7 @@
 
 **下载：** [最新版本与安装包](https://github.com/wr316yn/x-followback-helper/releases/latest) · [安装教程](安装使用.md) · [隐私说明](PRIVACY.md)
 
-在 Release 的 Assets 中下载 `x-followback-helper-v1.1.0.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.1.0-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
+在 Release 的 Assets 中下载 `x-followback-helper-v1.1.1.zip`，解压后加载里面的 `X回关助手` 文件夹。`x-followback-helper-v1.1.1-source.zip` 用于开发，不能直接当作已构建扩展安装。本地构建的 ZIP 使用中文文件名，内容相同。
 
 ![X 回关助手界面，截图账号均为虚构测试数据](docs/preview.png)
 
@@ -68,3 +68,7 @@ npm run package
 面板右上角点击 English / 中文切换语言，选择保存在本地。账号名称保持原文。
 
 在自己的关注者页面点击“快捷收集 / Quick collect”，每 3 秒自动浏览约三分之二屏；可随时点击停止。切换页面、账号、隐藏标签页、暂停收集或发现提示框时停止；连续约 15 秒没有新账号或浏览达到 100 步也会停止。这不代表已经收集全部关注者。插件不会自动关注。
+
+### v1.1.1 语言按钮
+
+右上角语言按钮改为地球图标与胶囊样式，显示当前语言 EN / 中文，点击切换到另一种语言。深色面板使用深灰底与浅色图标，浅色面板使用浅灰底。
