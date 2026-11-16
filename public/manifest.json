@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X 回关助手",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "整理已浏览的关注者，找出尚未回关的人。仅本地保存，由你手动关注。",
   "permissions": [
     "storage"
